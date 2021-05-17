@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.github.ukasz09.GameApp;
 
 public class Room {
-    public static final float PLAYER_WIDTH_METERS = 3, PLAYER_HEIGHT_METERS = 2;
     private static final int MOVE_FRAMES_COLUMNS = 5, FRAME_ROWS = 1;
     public static final String ROOM_SHEET_PATH = "sheets/monster-move.png";
     private static final float MOVING_FRAME_DURATION = 0.03f;
@@ -26,8 +25,8 @@ public class Room {
 
     public void reset() {
         isScreenTouched = false;
-        this.widthPx = PLAYER_WIDTH_METERS * GameApp.PIXEL_PER_METER;
-        this.heightPx = PLAYER_HEIGHT_METERS * GameApp.PIXEL_PER_METER;
+        this.widthPx = GameApp.VIEWPORT_WIDTH;
+        this.heightPx = GameApp.VIEWPORT_HEIGHT;
     }
 
     private void createAnimation() {

@@ -12,8 +12,10 @@ import com.github.ukasz09.player.Room;
 
 public class GameApp extends ApplicationAdapter {
     private static final float CAMERA_ZOOM = 4.0f;
-    public static final float PIXEL_PER_METER = 16f;
     private static final float TIME_STEP = 1 / 60f;
+
+    public static float VIEWPORT_WIDTH = 0;
+    public static float VIEWPORT_HEIGHT = 0;
 
     private OrthographicCamera camera;
     private Box2DDebugRenderer box2DDebugRenderer;
@@ -33,7 +35,9 @@ public class GameApp extends ApplicationAdapter {
 
     private void initCamera() {
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, Gdx.graphics.getWidth() / CAMERA_ZOOM, Gdx.graphics.getHeight() / CAMERA_ZOOM);
+        VIEWPORT_WIDTH = Gdx.graphics.getWidth() / CAMERA_ZOOM;
+        VIEWPORT_HEIGHT = Gdx.graphics.getHeight() / CAMERA_ZOOM;
+        camera.setToOrtho(false, VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
     }
 
     private void initTextures() {
