@@ -4,7 +4,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -14,14 +13,13 @@ public class GameApp extends ApplicationAdapter {
     private static final float CAMERA_ZOOM = 4.0f;
     private static final float TIME_STEP = 1 / 60f;
 
-    public static float VIEWPORT_WIDTH = 0;
-    public static float VIEWPORT_HEIGHT = 0;
+    public static float VIEWPORT_WIDTH;
+    public static float VIEWPORT_HEIGHT;
 
     private OrthographicCamera camera;
     private Box2DDebugRenderer box2DDebugRenderer;
     private Room room;
     private SpriteBatch batch;
-    private Texture texture;
 
     public GameApp() {
     }
@@ -43,7 +41,6 @@ public class GameApp extends ApplicationAdapter {
     private void initTextures() {
         box2DDebugRenderer = new Box2DDebugRenderer();
         batch = new SpriteBatch();
-        texture = new Texture(Room.ROOM_SHEET_PATH);
     }
 
     private void initRoom() {
@@ -58,7 +55,6 @@ public class GameApp extends ApplicationAdapter {
         batch.begin();
         drawRoom();
         batch.end();
-//        renderDebugBoxes();
     }
 
     private void update() {
@@ -66,11 +62,8 @@ public class GameApp extends ApplicationAdapter {
         room.updateAnimation(TIME_STEP);
     }
 
-    // TODO: fix
     private void drawRoom() {
-        float truckOriginX = room.getWidthPx() / 2;
-        float truckOriginY = room.getHeightPx() / 2;
-        batch.draw(room.getRegion(), 0, 0, truckOriginX, truckOriginY, room.getWidthPx(), room.getHeightPx(), 1.2f, 1.2f, 0);
+        batch.draw(room.getRegion(), 0, 0, VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
     }
 
     @Override
@@ -80,7 +73,6 @@ public class GameApp extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        texture.dispose();
         batch.dispose();
         box2DDebugRenderer.dispose();
     }
@@ -98,6 +90,6 @@ public class GameApp extends ApplicationAdapter {
     private void onTouchPositionUpdate() {
         Vector3 touchPosition = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         touchPosition = camera.unproject(touchPosition);
-        System.out.println(touchPosition);
+        // TODO: play normal / reverse frames
     }
 }

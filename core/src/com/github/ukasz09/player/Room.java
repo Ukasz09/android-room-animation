@@ -4,18 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.github.ukasz09.GameApp;
 
 public class Room {
-    private static final int MOVE_FRAMES_COLUMNS = 5, FRAME_ROWS = 1;
-    public static final String ROOM_SHEET_PATH = "sheets/monster-move.png";
-    private static final float MOVING_FRAME_DURATION = 0.03f;
+    private static final int FRAMES_QTY = 96;
+    private static final int ZERO_PADDING_LENGTH = 3;
+    public static final String ROOM_IMG_FRAME_PATH = "sheets/frame{number}.jpg";
+    private static final float MOVING_FRAME_DURATION = 0.1f;
 
     private Animation<TextureRegion> moveAnimation;
     private TextureRegion region;
     float stateTime;
-    private float widthPx;
-    private float heightPx;
     public boolean isScreenTouched = false;
 
     public Room() {
@@ -25,36 +23,26 @@ public class Room {
 
     public void reset() {
         isScreenTouched = false;
-        this.widthPx = GameApp.VIEWPORT_WIDTH;
-        this.heightPx = GameApp.VIEWPORT_HEIGHT;
     }
 
     private void createAnimation() {
-        TextureRegion[] walkFrames = createFrames(ROOM_SHEET_PATH, MOVE_FRAMES_COLUMNS, FRAME_ROWS);
+        TextureRegion[] walkFrames = createFrames(ROOM_IMG_FRAME_PATH, FRAMES_QTY);
         moveAnimation = new Animation<>(MOVING_FRAME_DURATION, walkFrames);
         stateTime = 0f;
         region = moveAnimation.getKeyFrame(0);
     }
 
-    private TextureRegion[] createFrames(String sheetPath, int frameColumns, int frameRows) {
-        Texture sheet = new Texture(Gdx.files.internal(sheetPath));
-        TextureRegion[][] tmp = TextureRegion.split(sheet, sheet.getWidth() / frameColumns, sheet.getHeight() / frameRows);
-        TextureRegion[] frames = new TextureRegion[frameColumns * frameRows];
-        int index = 0;
-        for (int i = 0; i < frameRows; i++) {
-            for (int j = 0; j < frameColumns; j++) {
-                frames[index++] = tmp[i][j];
-            }
+    private TextureRegion[] createFrames(String framesImgPath, int framesQty) {
+        TextureRegion[] frames = new TextureRegion[framesQty];
+        for (int i = 0; i < framesQty; i++) {
+            String zeroPaddingFormat = "%0" + ZERO_PADDING_LENGTH + "d";
+            int frameNumber = i + 1;
+            String frameNumberStr = String.format(zeroPaddingFormat, frameNumber);
+            String pathToFrame = framesImgPath.replace("{number}", frameNumberStr);
+            Texture frame = new Texture(Gdx.files.internal(pathToFrame));
+            frames[i] = new TextureRegion(frame);
         }
         return frames;
-    }
-
-    public float getWidthPx() {
-        return widthPx;
-    }
-
-    public float getHeightPx() {
-        return heightPx;
     }
 
     public void setIsScreenTouched(boolean isScreenTouched) {
