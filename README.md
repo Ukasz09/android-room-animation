@@ -6,7 +6,7 @@ Room showcase animation (3ds Max, Java, Android Studio)
 
 ### Demo
 
-![](https://raw.githubusercontent.com/Ukasz09/android-room-animation/master/readme/animation.gif)
+![](https://raw.githubusercontent.com/Ukasz09/android-room-animation/master/readme/animation-v2.gif)
 
 ---
 
