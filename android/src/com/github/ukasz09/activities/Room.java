@@ -14,6 +14,4 @@ public class Room extends AndroidApplication {
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
         initialize(new GameApp(), config);
     }
-
-
 }

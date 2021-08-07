@@ -80,16 +80,22 @@ public class GameApp extends ApplicationAdapter {
 
     private void inputUpdate() {
         if (Gdx.input.isTouched()) {
-            room.setIsScreenTouched(true);
             onTouchPositionUpdate();
         } else {
-            room.setIsScreenTouched(false);
+            room.resetIsScreenTouched();
         }
     }
 
     private void onTouchPositionUpdate() {
         Vector3 touchPosition = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         touchPosition = camera.unproject(touchPosition);
-        // TODO: play normal / reverse frames
+        boolean isRightPartOfScreen = touchPosition.x >= VIEWPORT_WIDTH / 2;
+        if (isRightPartOfScreen) {
+            room.setRightPartOfScreenTouched(true);
+            room.setLeftPartOfScreenTouched(false);
+        } else {
+            room.setLeftPartOfScreenTouched(true);
+            room.setRightPartOfScreenTouched(false);
+        }
     }
 }

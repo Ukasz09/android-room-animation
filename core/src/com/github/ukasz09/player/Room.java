@@ -6,30 +6,32 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Room {
-    private static final int FRAMES_QTY = 96;
+    private static final int FRAMES_QTY = 84;
     private static final int ZERO_PADDING_LENGTH = 3;
     public static final String ROOM_IMG_FRAME_PATH = "sheets/frame{number}.jpg";
-    private static final float MOVING_FRAME_DURATION = 0.1f;
+    private static final float MOVING_FRAME_DURATION = 0.09f;
 
-    private Animation<TextureRegion> moveAnimation;
+    private Animation<TextureRegion> cameraAnimation;
     private TextureRegion region;
     float stateTime;
-    public boolean isScreenTouched = false;
+    public boolean rightPartOfScreenTouched = false;
+    public boolean leftPartOfScreenTouched = false;
 
     public Room() {
         createAnimation();
-        reset();
+        resetIsScreenTouched();
     }
 
-    public void reset() {
-        isScreenTouched = false;
+    public void resetIsScreenTouched() {
+        rightPartOfScreenTouched = false;
+        leftPartOfScreenTouched = false;
     }
 
     private void createAnimation() {
         TextureRegion[] walkFrames = createFrames(ROOM_IMG_FRAME_PATH, FRAMES_QTY);
-        moveAnimation = new Animation<>(MOVING_FRAME_DURATION, walkFrames);
+        cameraAnimation = new Animation<>(MOVING_FRAME_DURATION, walkFrames);
         stateTime = 0f;
-        region = moveAnimation.getKeyFrame(0);
+        region = cameraAnimation.getKeyFrame(stateTime);
     }
 
     private TextureRegion[] createFrames(String framesImgPath, int framesQty) {
@@ -45,14 +47,28 @@ public class Room {
         return frames;
     }
 
-    public void setIsScreenTouched(boolean isScreenTouched) {
-        this.isScreenTouched = isScreenTouched;
+    public void setRightPartOfScreenTouched(boolean isTouched) {
+        this.rightPartOfScreenTouched = isTouched;
+    }
+
+    public void setLeftPartOfScreenTouched(boolean isTouched) {
+        this.leftPartOfScreenTouched = isTouched;
     }
 
     public void updateAnimation(float delta) {
-        stateTime += delta;
-        if (isScreenTouched)
-            region = moveAnimation.getKeyFrame(stateTime, true);
+        if (rightPartOfScreenTouched) {
+            stateTime += delta;
+            if (stateTime > FRAMES_QTY) {
+                stateTime = FRAMES_QTY;
+            }
+            region = cameraAnimation.getKeyFrame(stateTime, false);
+        } else if (leftPartOfScreenTouched) {
+            stateTime -= delta;
+            if (stateTime < 0) {
+                stateTime = 0;
+            }
+            region = cameraAnimation.getKeyFrame(stateTime, false);
+        }
     }
 
     public TextureRegion getRegion() {
